@@ -27,17 +27,8 @@ void setup() {
   Serial.begin(9600);
 }
  
- 
-void loop() {
-   val = digitalRead(inputPin);  // read input value
-  if (val == HIGH) {            // check if the input is HIGH
-    digitalWrite(ledPin, HIGH);  // turn LED ON
-    if (pirState == LOW) {
-      pirState = HIGH;
-      // we have just turned on
-      Serial.println("Motion detected!");
-      
-      int r, g, b;
+void rgbLights() {
+   int r, g, b;
  
   // fade from blue to violet
   for (r = 0; r < 256; r++) { 
@@ -68,11 +59,25 @@ void loop() {
   for (g = 255; g > 0; g--) { 
     analogWrite(GREENPIN, g);
     delay(FADESPEED);
-  } 
+  }  
+}
+void loop() {
+   val = digitalRead(inputPin);  // read input value
+  if (val == HIGH) {            // check if the input is HIGH
+    digitalWrite(ledPin, HIGH);  // turn LED ON
+    if (pirState == LOW) {
+      pirState = HIGH;
+      // we have just turned on
+      Serial.println("Motion detected!");
+      Serial.println("1st lights");
+      rgbLights();
+      Serial.println("2nd lights");
+      rgbLights();
+     
   analogWrite(GREENPIN, 0);
   analogWrite(BLUEPIN, 0);
   analogWrite(REDPIN, 0);
-      // We only want to print on the output change, not state
+    
       
     }
   } 
@@ -82,7 +87,7 @@ void loop() {
     if (pirState == HIGH){
       pirState = LOW;
       // we have just turned of
-      Serial.println("Motion ended!");
+      Serial.println("Ready to detect motion!");
       // We only want to print on the output change, not state
       
     }
